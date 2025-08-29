@@ -2,6 +2,9 @@
 require_once "../config.php";
 header("Content-Type: application/json");
 
+// Define a duração do timeout em segundos (e.g., 2 horas)
+$timeout_duration = 2 * 60 * 60; // 2 horas
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents("php://input"), true);
 
@@ -16,12 +19,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $user = $smt->fetch(PDO::FETCH_ASSOC);
 
         if ($user) {
-            // Gera token único
-            $token = bin2hex(random_bytes(32));
+            // Gera token único com SHA512
+            $random_string = random_bytes(32);
+            $token = hash('sha512', $random_string);
 
-            // Salva token na tabela login
-            $smt = $pdo->prepare("INSERT INTO token (id_usuario, token) VALUES (?, ?)");
-            $smt->execute([$user['id'], $token]);
+            // Adiciona a lógica de limpeza de tokens antigos
+            // Exclui todos os tokens expirados para o usuário
+            $smt_delete = $pdo->prepare("DELETE FROM token WHERE usuarios_id_usuario = ? AND created_at < NOW() - INTERVAL ? SECOND");
+            $smt_delete->execute([$user['id_usuario'], $timeout_duration]);
+
+
+            // Salva o novo token na tabela
+            $smt = $pdo->prepare("INSERT INTO token (usuarios_id_usuario, token) VALUES (?, ?)");
+            $smt->execute([$user['id_usuario'], $token]);
 
             if ($smt->rowCount() > 0) {
                 echo json_encode([
@@ -29,8 +39,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'message' => 'Login realizado via SSO',
                     'token'   => $token,
                     'user'    => [
-                        'id'    => $user['id'],
-                        'email' => $user['email']
+                        'id'    => $user['id_usuario'],
+                        'email' => $user['usuario_email']
                     ]
                 ]);
                 exit();
