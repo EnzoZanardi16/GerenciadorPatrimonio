@@ -7,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     try {
         $pdo = conn();
 
-        $stmt = $pdo->prepare("SELECT * FROM Ambientes");
+        $stmt = $pdo->prepare("SELECT * FROM ambientes");
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
