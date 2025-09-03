@@ -2,6 +2,7 @@
 
 require_once "../config.php";
 header("Content-Type: application/json");
+date_default_timezone_set('America/Sao_Paulo');
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     try {
