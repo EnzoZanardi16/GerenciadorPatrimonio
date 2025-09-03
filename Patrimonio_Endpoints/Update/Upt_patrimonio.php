@@ -9,15 +9,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
         // Recebe JSON
         $data = json_decode(file_get_contents("php://input"), true);
 
-        $id             = $data["num_patrimonio"] ?? null; // chave primária
-        $nome           = $data["patrimonio_nome"] ?? null;
-        $atividade      = $data["patrimonio_del"] ?? null;
-        $status         = $data["status"] ?? null;
-        $img            = $data["patrimonio_img"] ?? null;
-        $denominacao    = $data["denominacao"] ?? null;
-        $origem         = $data["ambientes_id_ambientes"] ?? null;
+        // EXTRAI O ID DO USUÁRIO DO JSON
+        $id_usuario     = $data["id_usuario"] ?? null;
 
-        if ($id) {
+        $id             = $data["patrimonio"]["num_patrimonio"] ?? null; // chave primária
+        $nome           = $data["patrimonio"]["patrimonio_nome"] ?? null;
+        $atividade      = $data["patrimonio"]["patrimonio_del"] ?? null;
+        $status         = $data["patrimonio"]["status"] ?? null;
+        $img            = $data["patrimonio"]["patrimonio_img"] ?? null;
+        $denominacao    = $data["patrimonio"]["denominacao"] ?? null;
+        $origem         = $data["patrimonio"]["ambientes_id_ambientes"] ?? null;
+
+        if ($id && $id_usuario) { // Verifica se o ID do patrimônio e do usuário existem
+            // DEFINE A VARIÁVEL DE SESSÃO DO MYSQL
+            $pdo->exec("SET @id_usuario_logado = " . (int)$id_usuario);
+            
             $stmt = $pdo->prepare("
                 UPDATE patrimonios SET 
                     patrimonio_nome = COALESCE(:nome, patrimonio_nome),
@@ -36,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
             $stmt->bindParam(':img', $img);
             $stmt->bindParam(':denominacao', $denominacao);
             $stmt->bindParam(':origem', $origem);
-
+            
             $stmt->execute();
 
             echo json_encode([
@@ -52,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
             http_response_code(400);
             echo json_encode([
                 'status' => 'error',
-                'message' => 'ID do patrimônio é obrigatório para atualizar.'
+                'message' => 'ID do patrimônio e ID do usuário são obrigatórios para atualizar.'
             ]);
         }
     } catch (Exception $e) {
