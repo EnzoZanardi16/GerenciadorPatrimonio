@@ -11,6 +11,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
 
         $id     = $data["id_ambientes"]   ?? null; // ID do ambiente a ser atualizado
         $nome   = $data["ambiente_nome"] ?? null;
+        $categoria = $data["catgoria"] ?? null;
+        $local   = $data["localizacao"] ?? null;
         $status = $data["ambiente_del"]  ?? null;
 
         if ($id) {
@@ -45,6 +47,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
                 'data' => [
                     'ambientes_id'   => $id,
                     'ambiente_nome' => $nome,
+                    'categoria' => $categoria,
+                    'localizacao' => $local,
                     'ambiente_del'  => $status
                 ]
             ]);
