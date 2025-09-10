@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 05/09/2025 às 20:16
+-- Tempo de geração: 10/09/2025 às 13:54
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -150,7 +150,8 @@ CREATE TABLE `patrimonios` (
 
 INSERT INTO `patrimonios` (`num_patrimonio`, `patrimonio_nome`, `patrimonio_del`, `status`, `patrimonio_img`, `denominacao`, `ambientes_id_ambientes`, `verificacao_ambiente_id_verificacao`) VALUES
 (1001, 'Computador Dell Optiplex 7090', 'ativo', 'pendente', 'http://meuservidor.com/imgs/computador.jpg', 'Equipamento de TI', 1, 0),
-(1002, 'Projetor Epson PowerLite E20', 'ativo', 'pendente', 'http://meuservidor.com/imgs/projetor_epson.jpg', 'Equipamento Audiovisual', 2, 0);
+(1002, 'Projetor Epson PowerLite E20', 'ativo', 'pendente', 'http://meuservidor.com/imgs/projetor_epson.jpg', 'Equipamento Audiovisual', 2, 0),
+(1003, 'seila', 'ativo', 'pendente', 'aaaaaaaa.png', 'aaaaaaa', 1, 1);
 
 --
 -- Acionadores `patrimonios`
@@ -225,6 +226,17 @@ INSERT INTO `usuarios` (`id_usuario`, `usuario_nome`, `usuario_nivel`, `usuario_
 -- (Veja abaixo para a visão atual)
 --
 CREATE TABLE `verificacao` (
+`id_verificacao` int(11)
+,`id_usuario` int(11)
+,`data_hora` datetime
+,`ambiente_nome` varchar(100)
+,`num_patrimonio` int(11)
+,`patrimonio_nome` varchar(100)
+,`status` enum('pendente','localizado','fora do lugar','faltando')
+,`patrimonio_img` longtext
+,`usuario_nome` varchar(100)
+,`denominacao` varchar(100)
+,`usuario_nivel` enum('administrador','gestor','colaborador')
 );
 
 -- --------------------------------------------------------
@@ -264,7 +276,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `verificacao`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `verificacao`  AS SELECT `verificacao_ambiente`.`data_hora` AS `data_hora`, `ambientes`.`ambiente_nome` AS `ambiente_nome`, `patrimonios`.`num_patrimonio` AS `num_patrimonio`, `patrimonios`.`patrimonio_nome` AS `patrimonio_nome`, `patrimonios`.`status` AS `status`, `patrimonios`.`patrimonio_img` AS `patrimonio_img`, `patrimonios`.`denominacao` AS `denominacao`, `usuarios`.`usuario_nome` AS `usuario_nome`, `usuarios`.`usuario_nivel` AS `usuario_nivel` FROM (((`verificacao_ambiente` join `ambientes` on(`verificacao_ambiente`.`ambientes_id_ambientes` = `ambientes`.`id_ambientes`)) join `usuarios` on(`verificacao_ambiente`.`usuarios_id_usuario` = `usuarios`.`id_usuario`)) join `patrimonios` on(`verificacao_ambiente`.`patrimonios_num_patrimonio` = `patrimonios`.`num_patrimonio`)) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `verificacao`  AS SELECT `verificacao_ambiente`.`id_verificacao` AS `id_verificacao`, `usuarios`.`id_usuario` AS `id_usuario`, `verificacao_ambiente`.`data_hora` AS `data_hora`, `ambientes`.`ambiente_nome` AS `ambiente_nome`, `patrimonios`.`num_patrimonio` AS `num_patrimonio`, `patrimonios`.`patrimonio_nome` AS `patrimonio_nome`, `patrimonios`.`status` AS `status`, `patrimonios`.`patrimonio_img` AS `patrimonio_img`, `usuarios`.`usuario_nome` AS `usuario_nome`, `patrimonios`.`denominacao` AS `denominacao`, `usuarios`.`usuario_nivel` AS `usuario_nivel` FROM (((`patrimonios` join `ambientes` on(`patrimonios`.`ambientes_id_ambientes` = `ambientes`.`id_ambientes`)) join `verificacao_ambiente` on(`patrimonios`.`verificacao_ambiente_id_verificacao` = `verificacao_ambiente`.`id_verificacao`)) join `usuarios` on(`verificacao_ambiente`.`usuarios_id_usuario` = `usuarios`.`id_usuario`)) ;
 
 --
 -- Índices para tabelas despejadas
@@ -401,13 +413,6 @@ ALTER TABLE `movimentacao_item`
   ADD CONSTRAINT `fk_MovimentacaoItem_Ambientes2` FOREIGN KEY (`destino`) REFERENCES `ambientes` (`id_ambientes`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_MovimentacaoItem_Patrimonios1` FOREIGN KEY (`patrimonios_num_patrimonio`) REFERENCES `patrimonios` (`num_patrimonio`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_movimentacao_item_usuarios1` FOREIGN KEY (`usuarios_id_usuario`) REFERENCES `usuarios` (`id_usuario`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
---
--- Restrições para tabelas `patrimonios`
---
-ALTER TABLE `patrimonios`
-  ADD CONSTRAINT `fk_patrimonios_ambientes1` FOREIGN KEY (`ambientes_id_ambientes`) REFERENCES `ambientes` (`id_ambientes`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_patrimonios_verificacao_ambiente1` FOREIGN KEY (`verificacao_ambiente_id_verificacao`) REFERENCES `verificacao_ambiente` (`id_verificacao`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Restrições para tabelas `token`
