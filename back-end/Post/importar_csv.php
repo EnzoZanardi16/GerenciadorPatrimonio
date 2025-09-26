@@ -16,7 +16,7 @@ if (isset($_FILES['csv_file']) && $_FILES['csv_file']['error'] == 0) {
 
         // Prepara a query de inserção para a tabela 'patrimonios'
         $sql_patrimonios = "INSERT INTO patrimonios (num_patrimonio, denominacao, ambientes_id_ambientes, patrimonio_del, status, patrimonio_img, created_at) 
-                             VALUES (:num, :denominacao, :id_ambiente, 'ativo', 'localizado', '', NOW())";
+                             VALUES (:num, :denominacao, :id_ambiente, 'ativo', 'pendente', '', NOW())";
         $stmt_patrimonios = $pdo->prepare($sql_patrimonios);
         
         // Prepara a query de busca na tabela 'ambientes'
@@ -68,9 +68,5 @@ if (isset($_FILES['csv_file']) && $_FILES['csv_file']['error'] == 0) {
             $pdo->rollBack();
             echo "❌ Erro na importação: " . $e->getMessage();
         }
-    } else {
-        echo "❌ Erro ao abrir o arquivo.";
-    }
-} else {
-    echo "❌ Nenhum arquivo enviado.";
+    } 
 }

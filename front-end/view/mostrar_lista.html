@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="../css/mostrar_lista.css">
+    <title>Lista dos Patrimônios</title>
+</head>
+<body>
+    <header>
+        <div class="menu">
+            <button class="hamburguer">
+                <div id="barra1" class="barra"></div>
+                <div id="barra2" class="barra"></div>
+                <div id="barra3" class="barra"></div>
+            </button>
+            <nav>
+                <ul>
+                    <div class="perfil" onclick="Perfil()">
+                        <img src="../assets/man.png" alt="foto de perfil">
+                        <div class="editar">
+                            <p>Administrador</p><i class="bi bi-pencil" style="color: #fff; margin-left: 5px;"></i>
+                        </div>
+                    </div>
+                    <div class="itensmenu">
+
+                        <div class="cardmenu">
+                            <i class="bi bi-house"></i>
+                            <li><a href="home_admin.html">Home</a></li>
+                        </div>
+                        <div class="cardmenu">
+                            <i class="bi bi-person-add"></i>
+                            <li><a href="cadastro.html">Cadastrar Usuário</a></li>
+                        </div>
+                        <div class="cardmenu">
+                            <i class="bi bi-house-add"></i>
+                            <li><a href="cadastrar_ambientes.html">Cadastrar Ambientes</a></li>
+                        </div>
+                        <div class="cardmenu">
+                            <i class="bi bi-house-door"></i>
+                            <li><a href="ambientes.html">Ambientes</a></li>
+                        </div>
+                    </div>
+                    <div class="sair" onclick="Sair()">
+                        <i class="bi bi-box-arrow-right"></i>
+                        <p>Sair</p>
+                    </div>
+
+                </ul>
+            </nav>
+        </div>
+        <div class="logo">
+            <img src="../assets/logo_senai.png" alt="logo-senai">
+        </div>
+        <div class="notificacao">
+            <i class="bi bi-bell"></i>
+        </div>
+    </header>
+    <main>
+        <div class="escrita">
+            <i class="bi bi-arrow-left" onclick="Voltar()"></i>
+            <h1>Lista</h1>
+        </div>
+    </main>
+</body>
+</html>
