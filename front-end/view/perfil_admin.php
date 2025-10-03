@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link rel="stylesheet" href="../css/perfil_admin.css">
     <title>Perfil</title>
 </head>
+
 <body>
     <header>
         <div class="menu">
@@ -17,7 +19,7 @@
             </button>
             <nav>
                 <ul>
-                    <div class="perfil" onclick="Perfil()">
+                    <div class="perfilm" onclick="Perfil()">
                         <img src="../assets/man.png" alt="foto de perfil">
                         <div class="editar">
                             <p>Administrador</p><i class="bi bi-pencil" style="color: #fff; margin-left: 5px;"></i>
@@ -27,19 +29,23 @@
 
                         <div class="cardmenu">
                             <i class="bi bi-house"></i>
-                            <li><a href="home_admin.html">Home</a></li>
+                            <li><a href="home_admin.php
+                            ">Home</a></li>
                         </div>
                         <div class="cardmenu">
                             <i class="bi bi-person-add"></i>
-                            <li><a href="cadastro.html">Cadastrar Usuário</a></li>
+                            <li><a href="cadastro.php
+                            ">Cadastrar Usuário</a></li>
                         </div>
                         <div class="cardmenu">
                             <i class="bi bi-house-add"></i>
-                            <li><a href="cadastrar_ambientes.html">Cadastrar Ambientes</a></li>
+                            <li><a href="cadastrar_ambientes.php
+                            ">Cadastrar Ambientes</a></li>
                         </div>
                         <div class="cardmenu">
                             <i class="bi bi-house-door"></i>
-                            <li><a href="ambientes.html">Ambientes</a></li>
+                            <li><a href="ambientes.php
+                            ">Ambientes</a></li>
                         </div>
                     </div>
                     <div class="sair" onclick="Sair()">
@@ -59,18 +65,19 @@
     </header>
 
     <main class="main-colaborador">
+
         <div class="conteiner-perfil">
             <div class="perfil">
-                <img src="../assets/man.png" alt="Foto do colaborador">
-                <p>Colaborador</p>
+                <img src="../assets/man.png" alt="Foto do usuário">
+                <p id="perfil-nome">Carregando...</p>
             </div>
         </div>
 
         <!-- DADOS -->
-         <div class="dados">
+        <div class="dados">
             <div class="info">
                 <p>Email</p>
-                <p>colaborador@gmail.com</p>
+                <p id="perfil-email">Carregando...</p>
             </div>
             <div class="info">
                 <p>Senha</p>
@@ -78,10 +85,9 @@
             </div>
             <div class="info">
                 <p>Cargo</p>
-                <p>Colaborador</p>
+                <p id="perfil-cargo">Carregando...</p>
             </div>
-
-         </div>
+        </div>
 
         <div class="editar-logout">
             <div class="card" onclick="Sair()">
@@ -97,14 +103,11 @@
 
     <footer></footer>
     <script>
-        function Editar(){
-            window.location.href = 'editar_colaborador.html';
+        function Editar() {
+            window.location.href = 'editar_colaborador.php';
         }
 
-        function Sair(){
-            window.location.href = 'login.html';
-            alert("Você saiu da sua conta...")
-        }
+        
 
         // MENU
         const hamburguer = document.querySelector(".hamburguer");
@@ -118,6 +121,76 @@
             nav.classList.toggle("ativo");
         });
 
+        document.addEventListener("DOMContentLoaded", async () => {
+            const usuario = JSON.parse(localStorage.getItem("user")); // <--- aqui
+            // console.log("Objeto do usuário:", usuario);
+            // console.log("Email que será buscado:", usuario.email);
+
+    if (!usuario) {
+        alert("Você precisa estar logado para acessar o perfil.");
+        window.location.href = "index.php";
+        return;
+    }
+
+    try {
+        // busca no back-end
+
+        const response = await fetch(`../../back-end/Get/Get_usuario.php?email=${usuario.email}`);
+        const result = await response.json();
+
+        if (result.status === "success") {
+            const dados = result.data;
+            document.getElementById("perfil-nome").innerText = dados.usuario_nome;
+            document.getElementById("perfil-email").innerText = dados.usuario_email;
+            document.getElementById("perfil-cargo").innerText = dados.usuario_nivel;
+        } else {
+            alert("Erro: " + result.message);
+        }
+    } catch (error) {
+        console.error("Erro ao carregar perfil:", error);
+    }
+});
+
+     async function Sair() {
+    try {
+        // pega o token salvo na sessão/localStorage
+        const token = sessionStorage.getItem("token") || localStorage.getItem("token");
+
+        const response = await fetch("../../back-end/Post/logout.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ token: token })
+        });
+
+        const result = await response.json();
+
+        if (result.status === "success") {
+            // limpa tokens armazenados
+            sessionStorage.removeItem("token");
+            localStorage.removeItem("token");
+
+            // alerta de confirmação
+            alert("Você saiu da conta com sucesso!");
+
+            // redireciona para a tela de login
+            window.location.href = "index.php";
+        } else {
+            alert("Erro ao sair: " + result.mensagem);
+        }
+    } catch (error) {
+        alert("Falha na conexão com o servidor de logout.");
+        console.error(error);
+    }
+}
+
+
+
+    
+
+
     </script>
 </body>
+
 </html>

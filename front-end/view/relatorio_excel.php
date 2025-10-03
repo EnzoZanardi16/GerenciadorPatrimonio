@@ -29,7 +29,7 @@
     <main class="conteudo-relatorio">
 
         <div class="titulo-relatorio">
-            <a href="relatorio.html" class="voltar"><i class="fa-solid fa-arrow-left"></i></a>
+            <a href="relatorio.php" class="voltar"><i class="fa-solid fa-arrow-left"></i></a>
             <h1>Relatório Excel</h1>
         </div>
     

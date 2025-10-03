@@ -184,20 +184,21 @@ body {
   /* AMBIENTES */
 
   .escrita {
-    width: 100%;
+    width: 50%;
     height: 80px;
     display: flex;
-    justify-content: center;
+    justify-content: space-evenly;
     align-items: center;
   }
 
   .escrita h1 {
-    font-size: 25px;
-    padding: 5px0px;
+    font-size: 20px;
+    padding: 5px 0px;
   }
 
   .escrita i {
     font-size: 30px;
+    margin-left: 10px;
   }
 
   #barra {

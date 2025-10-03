@@ -19,7 +19,9 @@
         </div>
 
 
+
         <div class="formulariologin">
+
             <form id="formLogin">
                 <div class="input-container">
                     <i class="bi bi-envelope"></i>
@@ -49,33 +51,42 @@
             e.preventDefault();
 
             const email = document.getElementById("email").value;
-            const senha = document.getElementById("senha").value; // seu PHP atual ainda não valida senha
-
-            const data = {
-                email: email,
-                senha: senha
-            };
+            const senha = document.getElementById("senha").value;
 
             try {
+                // OBSERVAÇÃO: Seu script HTML está chamando LoginSSO.php. 
+                // Certifique-se de que este script no back-end está tratando a senha corretamente.
                 const response = await fetch("../../back-end/Post/LoginSSO.php", {
                     method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(data)
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email, senha })
                 });
 
                 const result = await response.json();
+                console.log(result); // <--- O nível está aqui! Exemplo: result.user.nivel
 
                 if (result.status === "success") {
-                    alert("✅ " + result.message);
+                    // Mostra alerta de login realizado
+                    alert("✅ Login realizado com sucesso!");
 
-                    // salva token no navegador
+                    // Salva token e usuário
                     localStorage.setItem("token", result.token);
                     localStorage.setItem("user", JSON.stringify(result.user));
 
-                    // redireciona para a home (ajuste o destino)
-                    window.location.href = "home_admin.html";
+                    // 🌟 CORREÇÃO AQUI: Garante que o nível é comparado em minúsculas e trata o 'administrador'
+                    const nivel = result.user.nivel ? result.user.nivel.toLowerCase() : '';
+
+                    // Redirecionamento conforme nível
+                    if (nivel === "colaborador") {
+                        window.location.href = "ambientesC.php";
+                    } else if (nivel === "gestor" || nivel === "administrador") {
+                        // Gestor e Administrador vão para a mesma página administrativa
+                        window.location.href = "home_admin.php";
+                    } else {
+                        // Se o nível vier nulo, vazio ou diferente dos esperados.
+                        alert(`❌ Tipo de usuário desconhecido: ${nivel}`);
+                    }
+
                 } else {
                     alert("❌ " + result.message);
                 }
@@ -83,6 +94,7 @@
                 alert("⚠️ Erro na requisição: " + error.message);
             }
         });
+
     </script>
 
 </body>

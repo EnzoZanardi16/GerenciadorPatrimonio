@@ -47,7 +47,7 @@
 
     <script>
         function Voltar(){
-            window.location.href = 'ambientes.html'
+            window.location.href = 'ambientes.php'
         }
     </script>
 </body>

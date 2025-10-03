@@ -76,95 +76,105 @@ body {
   .hamburguer.aberto #barra3 {
     transform: rotate(-45deg) translate(7px, -6px);
   }
+
   nav {
-        position: absolute;
-        top: 100px;
-        /* logo abaixo do header */
-        left: 0;
-        width: 250px;
-        height: 100vh;
-        background: linear-gradient(to right, #940808, #a71919);
-        /* background-color: #ca1f1f; */
-        transform: translateX(-100%);
-        transition: transform 0.3s ease;
-    }
+    position: absolute;
+    top: 100px;
+    /* logo abaixo do header */
+    left: 0;
+    width: 250px;
+    height: 100vh;
+    background: linear-gradient(to right, #940808, #a71919);
+    /* background-color: #ca1f1f; */
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
 
-    nav.ativo {
-        transform: translatey(0);
-    }
+  nav.ativo {
+    transform: translatey(0);
+  }
 
-    nav ul {
-        list-style: none;
-        padding: 20px;
-    }
+  nav ul {
+    list-style: none;
+    padding: 20px;
+  }
 
-    nav ul li {
-        margin: 15px 0;
-    }
+  nav ul li {
+    margin: 15px 0;
+  }
 
-    nav ul li a {
-        color: #fff;
-        text-decoration: none;
-    }
-    .perfil{
-        width: 100%;
-        height: 50px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        margin-top: 10px;
-    }
-    .perfil img{
-        width: 60px;
-        height: 60px;
-    }
-    .editar{
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    .editar p{
-        color: #fff;
-        font-size: 17px;
-    }
+  nav ul li a {
+    color: #fff;
+    text-decoration: none;
+  }
 
-    .itensmenu{
-        width: 100%;
-        height: auto;
-        display: flex;
-        justify-content: center;
-        align-items: start;
-        flex-direction: column;
-        margin-top: 50px;
-    }
-    .cardmenu{
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    .cardmenu i{
-        margin: 10px;
-        color: #fff;
-        font-size: 30px;
-    }
-    .sair{
-        width: 100%;
-        display: flex;
-        justify-content: start;
-        align-items: start;
-        padding: 10px;
-        margin-top: 90%;
-        color: #fff;
-    }
-    .sair p{
-        margin-left: 10px;
-        font-size: 17px;
-    }
-    .sair i{
-        font-size: 20px;
-    }
+  .perfil {
+    width: 100%;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 10px;
+  }
+
+  .perfil img {
+    width: 60px;
+    height: 60px;
+  }
+
+  .editar {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .editar p {
+    color: #fff;
+    font-size: 17px;
+  }
+
+  .itensmenu {
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    flex-direction: column;
+    margin-top: 50px;
+  }
+
+  .cardmenu {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .cardmenu i {
+    margin: 10px;
+    color: #fff;
+    font-size: 30px;
+  }
+
+  .sair {
+    width: 100%;
+    display: flex;
+    justify-content: start;
+    align-items: start;
+    padding: 10px;
+    margin-top: 90%;
+    color: #fff;
+  }
+
+  .sair p {
+    margin-left: 10px;
+    font-size: 17px;
+  }
+
+  .sair i {
+    font-size: 20px;
+  }
 
   /* MAIN */
   main {
@@ -181,26 +191,80 @@ body {
   }
 
   .escrita {
-        width: 100%;
-        height: 50px;
-        display: flex;
-        justify-content: start;
-        align-items: center;
-        padding: 30px 0px 10px 20px;
-    }
-
-    .escrita h1 {
-        font-size: 20px;
-        padding: 5px 15px 0px;
-    }
-
-    .escrita i {
-        font-size: 30px;
-    }
-
-    #barra {
-        width: 280px;
-        height: 40px;
-    }
-
+    width: 100%;
+    height: 50px;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    padding: 30px 0px 10px 20px;
   }
+
+  .escrita h1 {
+    font-size: 22px;
+    padding: 5px 15px 0px;
+  }
+
+  .escrita i {
+    font-size: 30px;
+  }
+
+  #barra {
+    width: 280px;
+    height: 40px;
+  }
+
+  tabela-card {
+    background-color: #ffffff;
+    border-radius: 12px; /* Bordas bem arredondadas */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Sombra suave */
+    overflow: hidden; /* ESSENCIAL: Esconde tudo que "vazar" para fora */
+    width: 100%;
+    
+}
+
+/*
+ * 2. Estilização da tabela em si
+*/
+.tabela-card .table {
+    width: 90%;
+    border-collapse: collapse; /* Remove espaços entre células */
+}
+
+/*
+ * 3. Cabeçalho (thead) - Dando destaque e hierarquia
+*/
+.tabela-card th {
+    background-color: #f9fafb; /* Um cinza bem claro para destacar */
+    padding: 16px;
+    text-align: left;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #6b7280; /* Cor do texto do cabeçalho */
+    text-transform: uppercase; /* Deixa o texto em maiúsculas */
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid #e5e7eb; /* Linha sutil para separar do corpo */
+}
+
+/*
+ * 4. Células e linhas do corpo da tabela (tbody)
+*/
+.tabela-card td {
+    padding: 16px; /* Aumenta o espaçamento interno (respiro) */
+    font-size: 0.95rem;
+    color: #111827; /* Cor do texto principal */
+    border-bottom: 1px solid #e5e7eb; /* Linha separadora entre as linhas */
+}
+
+/* Remove a borda da última linha para um acabamento limpo */
+.tabela-card tbody tr:last-child td {
+    border-bottom: none;
+}
+
+  
+
+
+
+
+
+
+}

@@ -31,19 +31,19 @@
 
                         <div class="cardmenu">
                             <i class="bi bi-house"></i>
-                            <li><a href="home_admin.html">Home</a></li>
+                            <li><a href="home_admin.php">Home</a></li>
                         </div>
                         <div class="cardmenu">
                             <i class="bi bi-person-add"></i>
-                            <li><a href="cadastro.html">Cadastrar Usuário</a></li>
+                            <li><a href="cadastro.php">Cadastrar Usuário</a></li>
                         </div>
                         <div class="cardmenu">
                             <i class="bi bi-house-add"></i>
-                            <li><a href="cadastrar_ambientes.html">Cadastrar Ambientes</a></li>
+                            <li><a href="cadastrar_ambientes.php">Cadastrar Ambientes</a></li>
                         </div>
                         <div class="cardmenu">
                             <i class="bi bi-house-door"></i>
-                            <li><a href="ambientes.html">Ambientes</a></li>
+                            <li><a href="ambientes.php">Ambientes</a></li>
                         </div>
                     </div>
                     <div class="sair" onclick="Sair()">
@@ -157,7 +157,7 @@
             setTimeout(() => {
                 modal.style.display = "none";
                 // Redireciona para a próxima página (alterar se necessário)
-                window.location.href = "status.html";
+                window.location.href = "status.php";
             }, 2000);
         });
 

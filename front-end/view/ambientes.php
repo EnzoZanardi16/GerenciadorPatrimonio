@@ -31,19 +31,19 @@
 
                         <div class="cardmenu">
                             <i class="bi bi-house"></i>
-                            <li><a href="home_admin.html">Home</a></li>
+                            <li><a href="home_admin.php">Home</a></li>
                         </div>
                         <div class="cardmenu">
                             <i class="bi bi-person-add"></i>
-                            <li><a href="cadastro.html">Cadastrar Usuário</a></li>
+                            <li><a href="cadastro.php">Cadastrar Usuário</a></li>
                         </div>
                         <div class="cardmenu">
                             <i class="bi bi-house-add"></i>
-                            <li><a href="cadastrar_ambientes.html">Cadastrar Ambientes</a></li>
+                            <li><a href="cadastrar_ambientes.php">Cadastrar Ambientes</a></li>
                         </div>
                         <div class="cardmenu">
                             <i class="bi bi-house-door"></i>
-                            <li><a href="ambientes.html">Ambientes</a></li>
+                            <li><a href="ambientes.php">Ambientes</a></li>
                         </div>
                     </div>
                     <div class="sair" onclick="Sair()">
@@ -64,7 +64,7 @@
 
     <main>
         <div class="escrita">
-            <!-- <i class="bi bi-arrow-left" onclick="Voltar()"></i> -->
+            <i class="bi bi-arrow-left" onclick="Voltar()"></i>
             <h1>Ambientes</h1>
         </div>
 
@@ -81,34 +81,36 @@
 
     </main>
 
-    <script>
-        function Voltar() {
-            window.location.href = 'home_colaborador.html'
-        }
-
-        // MENU
-        const hamburguer = document.querySelector(".hamburguer");
-        const nav = document.querySelector("nav");
-
-        hamburguer.addEventListener("click", () => {
-            // animação do hambúrguer (vira X)
-            hamburguer.classList.toggle("aberto");
-
-            // abre/fecha o menu
-            nav.classList.toggle("ativo");
-        });
-
-        const categoriaIcones = {
-            "eletroeletronica": "bi bi-lightning-charge",  // ícone de eletricidade
-            "panificacao": "bi bi-basket",                // ícone de cesta/pão
-            "oficina": "bi bi-gear",                      // ícone de engrenagem
-            "quimica": "bi bi-flask",                     // ícone de frasco/química
-            "metalmecanica": "bi bi-tools",               // ícone de ferramentas
-            "ti": "bi bi-display"                          // mantém o ícone de TI
-        };
+    <script defer>
 
 
-        let ambientesCarregados = []; // guarda todos os ambientes carregados
+        document.addEventListener("DOMContentLoaded", () => {
+
+    // Evita reload do form
+    document.querySelector('form').addEventListener('submit', e => e.preventDefault());
+
+    function Voltar() {
+        window.location.href = 'home_admin.php';
+    }
+
+    const hamburguer = document.querySelector(".hamburguer");
+    const nav = document.querySelector("nav");
+
+    hamburguer.addEventListener("click", () => {
+        hamburguer.classList.toggle("aberto");
+        nav.classList.toggle("ativo");
+    });
+
+    const categoriaIcones = {
+        "eletroeletronica": "bi bi-lightning-charge",
+        "panificacao": "bi bi-basket",
+        "oficina": "bi bi-gear",
+        "quimica": "bi bi-flask",
+        "metalmecanica": "bi bi-tools",
+        "ti": "bi bi-display"
+    };
+
+    window.ambientesCarregados = [];
 
     async function carregarAmbientes() {
         try {
@@ -117,10 +119,12 @@
             console.log("Result:", result);
 
             const lista = document.getElementById("lista-ambientes");
+            if (!lista) return;
+
             lista.innerHTML = "";
 
             if (result.status === "success") {
-                ambientesCarregados = result.data; // salva os ambientes originais
+                ambientesCarregados = result.data;
                 renderizarAmbientes(result.data);
             } else {
                 alert("❌ Erro: " + result.message);
@@ -130,15 +134,17 @@
         }
     }
 
-    // função para renderizar os ambientes na tela
     function renderizarAmbientes(ambientes) {
         const lista = document.getElementById("lista-ambientes");
+        if (!lista) return;
+
         lista.innerHTML = "";
         ambientes.forEach(amb => {
+            console.log("ID do ambiente:", amb.id_ambientes); // <-- veja se imprime corretamente
             const icone = categoriaIcones[amb.categoria.toLowerCase()] || "bi bi-display";
 
             lista.innerHTML += `
-                <div class="conteiners" onclick="Scanear()">
+                <div class="conteiners" onclick="window.location.href='mostrar_lista.php?id=${amb.id_ambientes}'">
                     <i class="${icone}"></i>
                     <div class="texto">
                         <p>${amb.ambiente_nome}</p>
@@ -148,6 +154,22 @@
             `;
         });
     }
+
+    // Pesquisa em tempo real
+    const barra = document.getElementById("barra");
+    barra.addEventListener("input", function () {
+        const termo = this.value.toLowerCase();
+        const filtrados = ambientesCarregados.filter(amb =>
+            amb.ambiente_nome.toLowerCase().includes(termo) ||
+            (String(amb.localizacao || "")).toLowerCase().includes(termo)
+        );
+        renderizarAmbientes(filtrados);
+    });
+
+    carregarAmbientes();
+
+});
+
 
     // função de pesquisa
     document.getElementById("barra").addEventListener("input", function () {
@@ -161,6 +183,10 @@
     });
 
     document.addEventListener("DOMContentLoaded", carregarAmbientes);
+
+    function Voltar(){
+        window.location.href = 'home_admin.php'
+    }
 
     
 

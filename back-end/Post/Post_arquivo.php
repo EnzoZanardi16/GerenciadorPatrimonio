@@ -1,4 +1,20 @@
 <?php
+// 1. INICIA A SESSÃO para acessar o nível de usuário
+session_start();
+
+// Define os níveis de usuário permitidos para esta ação
+$niveis_permitidos = ['gestor', 'administrador'];
+
+// 2. VERIFICAÇÃO DE PERMISSÃO: Bloqueia se o usuário não tiver o nível adequado
+if (!isset($_SESSION['user_nivel']) || !in_array($_SESSION['user_nivel'], $niveis_permitidos)) {
+    http_response_code(403); // Forbidden
+    echo json_encode([
+        'status' => 'error', 
+        'message' => 'Acesso Negado. Você não tem permissão para realizar upload de arquivos.'
+    ]);
+    exit();
+}
+
 require_once "../config.php";
 header("Content-Type: application/json");
 date_default_timezone_set('America/Sao_Paulo');
@@ -29,14 +45,18 @@ try {
         exit();
     }
 
-    // --- Valida o ID do usuário (enviado como campo de formulário) ---
-    $usuario_id = $_POST['usuarios_id_usuario'] ?? null;
+    // --- Obtém o ID do usuário da SESSÃO, em vez de confiar no POST ---
+    // Isso é uma medida de segurança importante para evitar que um usuário envie um ID falso.
+    $usuario_id = $_SESSION['user_id'] ?? null;
+    
     if (empty($usuario_id)) {
-        http_response_code(400);
-        echo json_encode(['status' => 'error', 'message' => 'O ID do usuário é obrigatório.']);
+         // O ID da sessão deve existir se o check de permissão passou.
+         // Se não existir, é um erro interno ou sessão expirada/inválida.
+        http_response_code(401); 
+        echo json_encode(['status' => 'error', 'message' => 'Sessão de usuário inválida ou expirada.']);
         exit();
     }
-
+    
     $arquivo = $_FILES['arquivo'];
 
     // --- Valida a extensão do arquivo ---
@@ -72,13 +92,13 @@ try {
             (NOW(), :resultado, :caminho_arquivo, :arquivo_del, :id_usuario)
     ");
 
-    $resultado = 'sucesso'; // O resultado inicial é 'sucesso' (upload bem-sucedido)
-    $arquivo_del = 'ativo';   // Valor padrão
+    $resultado = 'sucesso'; 
+    $arquivo_del = 'ativo'; 
 
     $stmt->bindParam(':resultado', $resultado);
     $stmt->bindParam(':caminho_arquivo', $caminhoCompleto);
     $stmt->bindParam(':arquivo_del', $arquivo_del);
-    $stmt->bindParam(':id_usuario', $usuario_id);
+    $stmt->bindParam(':id_usuario', $usuario_id); // Usa o ID seguro da SESSÃO
     
     $stmt->execute();
 

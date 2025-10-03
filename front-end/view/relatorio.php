@@ -37,17 +37,17 @@
         
     
         <div class="cards-export">
-            <a href="dashboard.html" class="card dashboard">
+            <a href="dashboard.php" class="card dashboard">
                 <i class="fa-solid fa-chart-column"></i>
                 <span>Dashboard</span>
             </a>
         
-            <a href="relatorio_pdf.html" class="card pdf">
+            <a href="relatorio_pdf.php" class="card pdf">
                 <i class="fa-solid fa-file-pdf"></i>
                 <span>PDF</span>
             </a>
         
-            <a href="relatorio_excel.html" class="card excel">
+            <a href="relatorio_excel.php" class="card excel">
                 <i class="fa-solid fa-file-excel" style="color: #B60000;"></i>
                 <span>Excel</span>
             </a>

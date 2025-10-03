@@ -1,4 +1,20 @@
 <?php
+// 1. INICIA A SESSÃO para acessar o nível de usuário
+session_start();
+
+// Define os níveis de usuário permitidos para esta ação
+$niveis_permitidos = ['gestor', 'administrador'];
+
+// 2. VERIFICAÇÃO DE PERMISSÃO: Bloqueia se o usuário não tiver o nível adequado
+if (!isset($_SESSION['user_nivel']) || !in_array($_SESSION['user_nivel'], $niveis_permitidos)) {
+    http_response_code(403); // Forbidden
+    echo json_encode([
+        'status' => 'error', 
+        'message' => 'Acesso Negado. Seu nível de usuário não tem permissão para cadastrar novos patrimônios.'
+    ]);
+    exit();
+}
+
 require_once "../config.php";
 header("Content-Type: application/json");
 
@@ -20,8 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Validação mais robusta, verificando se não são vazios
         if (!empty($num_patrimonio) && !empty($nome) && !empty($origem)) {
             
-            // O INSERT está correto, pois omite a coluna 'verificacao_ambiente_id_verificacao'.
-            // Após a alteração na tabela, o banco de dados irá inserir NULL automaticamente nesta coluna.
+            // O INSERT está correto
             $stmt = $pdo->prepare("
                 INSERT INTO patrimonios 
                     (num_patrimonio, patrimonio_nome, patrimonio_del, status, patrimonio_img, denominacao, ambientes_id_ambientes) 

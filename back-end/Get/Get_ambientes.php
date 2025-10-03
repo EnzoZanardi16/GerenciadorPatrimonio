@@ -7,7 +7,7 @@ header("Content-Type: application/json");
 
 try {
     $pdo = conn();
-    $stmt = $pdo->query("SELECT ambiente_nome, categoria, localizacao FROM ambientes WHERE ambiente_del = 'ativo'");
+    $stmt = $pdo->query("SELECT id_ambientes, ambiente_nome, categoria, localizacao FROM ambientes WHERE ambiente_del = 'ativo'");
     $ambientes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     echo json_encode([

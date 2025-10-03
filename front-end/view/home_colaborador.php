@@ -45,7 +45,7 @@
     <footer></footer>
     <script>
         function Ambientes(){
-            window.location.href = 'ambientes.html'
+            window.location.href = 'ambientes.php'
         }
 
         // Atualiza a mensagem com o nome do usuário
@@ -54,7 +54,7 @@
 
         // Função para redirecionar
         function Ambientes() {
-            window.location.href = 'ambientes.html';
+            window.location.href = 'ambientes.php';
         }
     </script>
 </body>

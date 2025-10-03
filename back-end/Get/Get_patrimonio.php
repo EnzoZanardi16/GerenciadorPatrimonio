@@ -1,14 +1,23 @@
 <?php
-
 require_once "../config.php";
 header("Content-Type: application/json");
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    $id = $_GET['id_ambiente'] ?? null;
+
+    if (!$id) {
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'ID do ambiente não fornecido'
+        ]);
+        exit();
+    }
+
     try {
         $pdo = conn();
 
-        $stmt = $pdo->prepare("SELECT * FROM patrimonios");
-        $stmt->execute();
+        $stmt = $pdo->prepare("SELECT * FROM patrimonios  WHERE ambientes_id_ambientes = ?");
+        $stmt->execute([$id]);
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         echo json_encode([

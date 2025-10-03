@@ -29,19 +29,19 @@
 
                         <div class="cardmenu">
                             <i class="bi bi-house"></i>
-                            <li><a href="home_admin.html">Home</a></li>
+                            <li><a href="home_admin.php">Home</a></li>
                         </div>
                         <div class="cardmenu">
                             <i class="bi bi-person-add"></i>
-                            <li><a href="cadastro.html">Cadastrar Usuário</a></li>
+                            <li><a href="cadastro.php">Cadastrar Usuário</a></li>
                         </div>
                         <div class="cardmenu">
                             <i class="bi bi-house-add"></i>
-                            <li><a href="cadastrar_ambientes.html">Cadastrar Ambientes</a></li>
+                            <li><a href="cadastrar_ambiente.php">Cadastrar Ambientes</a></li>
                         </div>
                         <div class="cardmenu">
                             <i class="bi bi-house-door"></i>
-                            <li><a href="ambientes.html">Ambientes</a></li>
+                            <li><a href="ambientes.php">Ambientes</a></li>
                         </div>
                     </div>
                     <div class="sair" onclick="Sair()">
@@ -120,20 +120,23 @@
 
     <footer></footer>
     <script>
+        function Perfil() {
+            window.location.href = 'perfil_admin.php'
+        }
         function Ambientes() {
-            window.location.href = 'ambientes.html'
+            window.location.href = 'ambientes.php'
         }
         function CadastrarUsuario() {
-            window.location.href = 'cadastro.html'
+            window.location.href = 'cadastro.php'
         }
         // function CadastrarItens(){
-        //     window.location.href = 'cadastro.html'
+        //     window.location.href = 'cadastro.php'
         // }
         function CadastrarUsuario() {
-            window.location.href = 'cadastro.html'
+            window.location.href = 'cadastro.php'
         }
         function CadastrarAmbientes() {
-            window.location.href = 'cadastrar_ambientes.html'
+            window.location.href = 'cadastrar_ambiente.php'
         }
 
         const inputFile = document.getElementById("csv_file");
@@ -212,7 +215,7 @@
             alert("Você saiu da conta com sucesso!");
 
             // redireciona para a tela de login
-            window.location.href = "index.html";
+            window.location.href = "index.php";
         } else {
             alert("Erro ao sair: " + result.mensagem);
         }

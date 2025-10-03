@@ -1,5 +1,23 @@
 <?php
-// Inclui os arquivos necessários
+// 1. Inicia a sessão para acessar os dados do usuário logado
+session_start();
+
+// Define os níveis de usuário permitidos para esta ação (Importação)
+// Baseado na sua tabela 'usuarios', vamos permitir 'gestor' e 'administrador'.
+$niveis_permitidos = ['gestor', 'administrador'];
+
+// 2. VERIFICAÇÃO DE PERMISSÃO
+if (!isset($_SESSION['user_nivel']) || !in_array($_SESSION['user_nivel'], $niveis_permitidos)) {
+    // Se o nível de usuário NÃO EXISTE ou NÃO está na lista de permitidos (ex: é 'colaborador')
+    // Retorna uma mensagem de erro e interrompe a execução.
+    
+    // Você pode redirecionar para uma página de erro ou exibir uma mensagem:
+    header("Location: /caminho/para/pagina_nao_autorizada.html"); // Mude para o seu caminho de redirecionamento
+    // Ou simplesmente exibe um erro
+    die("Acesso Negado. Seu nível de usuário ({$_SESSION['user_nivel']}) não tem permissão para importar arquivos.");
+}
+
+// O código só continua a partir daqui se o usuário for 'gestor' ou 'administrador'.
 require_once "../config.php";
 
 // Conecta ao banco de dados
@@ -51,8 +69,6 @@ if (isset($_FILES['csv_file']) && $_FILES['csv_file']['error'] == 0) {
                         ':id_ambiente' => $id_ambiente
                     ]);
                 } else {
-                    // Opcional: registrar ou pular a linha se a localização não for encontrada
-                    // echo "Aviso: Localização '$localizacao_ambiente' não encontrada na tabela de ambientes. Linha ignorada.<br>";
                     continue;
                 }
             }
@@ -61,12 +77,16 @@ if (isset($_FILES['csv_file']) && $_FILES['csv_file']['error'] == 0) {
             $pdo->commit();
             fclose($handle);
             // Redireciona para a página home_admin
-            header("Location: /../enzo-zanardi/patrimonio/front-end/view/home_admin.html");
+            header("Location: /../enzo-zanardi/patrimonio/front-end/view/home_admin.php");
             exit();
         } catch (Exception $e) {
             // Reverte a transação em caso de erro
             $pdo->rollBack();
             echo "❌ Erro na importação: " . $e->getMessage();
         }
-    } 
+    } else {
+        // Você pode adicionar um tratamento de erro aqui se o arquivo não puder ser aberto
+    }
 }
+// O bloco 'else' de tratamento de erro de arquivo não enviado pode ficar aqui
+// se não for um redirecionamento.
