@@ -1,16 +1,15 @@
 <?php
+// back-end/config.php (ou back-end/Update/config.php)
+// GARANTA QUE NÃO HÁ ESPAÇOS OU LINHAS ANTES DESTA TAG
 
 function conn() {
-    // CORREÇÃO: Use apenas o IP do servidor do banco de dados
     $host = 'localhost';
     $dbname = 'enzo-zanardi';
     $user = 'enzo-zanardi';
-    $pass = 'enzo-zanardi';
+    $pass = 'enzo-zanardi'; // Verifique se esta senha está correta!
     $charset = 'utf8mb4';
     $porta = '8024';
 
-    // A porta 3024 estava incorreta e foi substituída por 8024,
-    // que é a porta do host que você informou.
     $dsn = "mysql:host=$host;dbname=$dbname;charset=$charset;port=$porta";
 
     try {
@@ -21,9 +20,13 @@ function conn() {
         ]);
         return $pdo;
     } catch (PDOException $e) {
+        // Se a conexão falhar, retorna JSON de erro e encerra
+        http_response_code(500);
         die(json_encode([
             'status' => 'error',
-            'message' => 'Erro na conexão com o banco de dados: ' . $e->getMessage()
+            'message' => 'Erro fatal na conexão com o banco de dados (PDO): ' . $e->getMessage()
         ]));
     }
 }
+
+$conn = conn();

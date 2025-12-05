@@ -1,3 +1,26 @@
+<?php
+session_start();
+
+$required_levels = ['administrador', 'gestor'];
+
+$redirect_page = 'index.php';
+
+if (!isset($_SESSION['user_id']) || !isset($_SESSION['login_token'])) {
+    $_SESSION['auth_error'] = "Você precisa estar logado para acessar esta página.";
+    header("Location: " . $redirect_page);
+    exit();
+}
+
+$user_nivel_sessao = isset($_SESSION['user_nivel']) ? strtolower(trim($_SESSION['user_nivel'])) : null;
+
+if (empty($user_nivel_sessao) || !in_array($user_nivel_sessao, $required_levels)) {
+    $_SESSION['auth_error'] = "Acesso Negado. Seu nível de usuário ('" . strtoupper($user_nivel_sessao) . "') não tem permissão para esta área.";
+
+    header("Location: " . $redirect_page);
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -5,7 +28,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="../css/cadastro.css?V2.0">
+    <link rel="stylesheet" href="../css/cadastro.css?V3.0">
     <title>Cadastro</title>
 </head>
 
@@ -19,8 +42,8 @@
 
         <div class="formulariocadastro">
             <div class="escrita">
+                <i class="bi bi-arrow-left" style="color: #777777;" onclick="Voltar()"></i>
                 <h1>Cadastrar Usuários</h1>
-                <i class="bi bi-arrow-right" style="color: #777777;" onclick="Voltar()"></i>
             </div>
             <form id="formCadastro">
                 <div class="input-container">

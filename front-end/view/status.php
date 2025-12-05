@@ -1,5 +1,29 @@
+<?php
+session_start();
+
+$required_levels = ['administrador', 'gestor', 'colaborador'];
+
+$redirect_page = 'index.php';
+
+if (!isset($_SESSION['user_id']) || !isset($_SESSION['login_token'])) {
+    $_SESSION['auth_error'] = "Você precisa estar logado para acessar esta página.";
+    header("Location: " . $redirect_page);
+    exit();
+}
+
+$user_nivel_sessao = isset($_SESSION['user_nivel']) ? strtolower(trim($_SESSION['user_nivel'])) : null;
+
+if (empty($user_nivel_sessao) || !in_array($user_nivel_sessao, $required_levels)) {
+    $_SESSION['auth_error'] = "Acesso Negado. Seu nível de usuário ('" . strtoupper($user_nivel_sessao) . "') não tem permissão para esta área.";
+
+    header("Location: " . $redirect_page);
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,8 +33,9 @@
     <link rel="stylesheet" href="../css/status.css">
     <title>Status</title>
 </head>
+
 <body>
-     <header>
+    <header>
         <div class="menu">
             <button class="hamburguer">
                 <div id="barra1" class="barra"></div>
@@ -46,9 +71,10 @@
     </main>
 
     <script>
-        function Voltar(){
+        function Voltar() {
             window.location.href = 'ambientes.php'
         }
     </script>
 </body>
+
 </html>

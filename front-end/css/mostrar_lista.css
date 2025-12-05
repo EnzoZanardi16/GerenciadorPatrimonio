@@ -212,53 +212,33 @@ body {
     width: 280px;
     height: 40px;
   }
+  .tabela{
+    margin-top: 10px;
+  }
 
-  tabela-card {
-    background-color: #ffffff;
-    border-radius: 12px; /* Bordas bem arredondadas */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Sombra suave */
-    overflow: hidden; /* ESSENCIAL: Esconde tudo que "vazar" para fora */
+  .buton{
     width: 100%;
-    
-}
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
-/*
- * 2. Estilização da tabela em si
-*/
-.tabela-card .table {
-    width: 90%;
-    border-collapse: collapse; /* Remove espaços entre células */
-}
+  .buton i{
+    color: #fff;
+    margin: 5px;
+  }
 
-/*
- * 3. Cabeçalho (thead) - Dando destaque e hierarquia
-*/
-.tabela-card th {
-    background-color: #f9fafb; /* Um cinza bem claro para destacar */
-    padding: 16px;
-    text-align: left;
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: #6b7280; /* Cor do texto do cabeçalho */
-    text-transform: uppercase; /* Deixa o texto em maiúsculas */
-    letter-spacing: 0.5px;
-    border-bottom: 1px solid #e5e7eb; /* Linha sutil para separar do corpo */
-}
+  .buton button{
+    border: none;
+    background-color: #940808;
+    width: 300px;
+    height: 30px;
+    border-radius: 20px;
+    color: #fff;
+    font-size: 18px;
+  }
 
-/*
- * 4. Células e linhas do corpo da tabela (tbody)
-*/
-.tabela-card td {
-    padding: 16px; /* Aumenta o espaçamento interno (respiro) */
-    font-size: 0.95rem;
-    color: #111827; /* Cor do texto principal */
-    border-bottom: 1px solid #e5e7eb; /* Linha separadora entre as linhas */
-}
-
-/* Remove a borda da última linha para um acabamento limpo */
-.tabela-card tbody tr:last-child td {
-    border-bottom: none;
-}
 
   
 

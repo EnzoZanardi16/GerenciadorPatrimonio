@@ -1,3 +1,26 @@
+<?php
+session_start();
+
+$required_levels = ['administrador', 'gestor'];
+
+$redirect_page = 'index.php';
+
+if (!isset($_SESSION['user_id']) || !isset($_SESSION['login_token'])) {
+    $_SESSION['auth_error'] = "Você precisa estar logado para acessar esta página.";
+    header("Location: " . $redirect_page);
+    exit();
+}
+
+$user_nivel_sessao = isset($_SESSION['user_nivel']) ? strtolower(trim($_SESSION['user_nivel'])) : null;
+
+if (empty($user_nivel_sessao) || !in_array($user_nivel_sessao, $required_levels)) {
+    $_SESSION['auth_error'] = "Acesso Negado. Seu nível de usuário ('" . strtoupper($user_nivel_sessao) . "') não tem permissão para esta área.";
+
+    header("Location: " . $redirect_page);
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -86,8 +109,9 @@
             <!-- Modal -->
             <div id="modalUpload" class="modal" style="display: none;">
                 <div class="modal-content">
-                    <h2 style="margin-bottom: 10px;">Arquivo selecionado: <p style="color: #6c757d;" id="fileName"></p></h2>
-                    
+                    <h2 style="margin-bottom: 10px;">Arquivo selecionado: <p style="color: #6c757d;" id="fileName"></p>
+                    </h2>
+
 
                     <form action="/../enzo-zanardi/patrimonio/back-end/Post/importar_csv.php" method="post"
                         enctype="multipart/form-data" id="uploadForm">
@@ -96,7 +120,7 @@
 
                         <div class="modal-buttons">
                             <button type="submit" class="btn-importar">Carregar Lista</button>
-                            
+
                             <button type="button" class="btn-cancelar" onclick="fecharModal()">Cancelar</button>
                         </div>
                     </form>
@@ -192,38 +216,38 @@
         }
 
         async function Sair() {
-    try {
-        // pega o token salvo na sessão/localStorage
-        const token = sessionStorage.getItem("token") || localStorage.getItem("token");
+            try {
+                // pega o token salvo na sessão/localStorage
+                const token = sessionStorage.getItem("token") || localStorage.getItem("token");
 
-        const response = await fetch("../../back-end/Post/logout.php", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ token: token })
-        });
+                const response = await fetch("../../back-end/Post/logout.php", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ token: token })
+                });
 
-        const result = await response.json();
+                const result = await response.json();
 
-        if (result.status === "success") {
-            // limpa tokens armazenados
-            sessionStorage.removeItem("token");
-            localStorage.removeItem("token");
+                if (result.status === "success") {
+                    // limpa tokens armazenados
+                    sessionStorage.removeItem("token");
+                    localStorage.removeItem("token");
 
-            // alerta de confirmação
-            alert("Você saiu da conta com sucesso!");
+                    // alerta de confirmação
+                    alert("Você saiu da conta com sucesso!");
 
-            // redireciona para a tela de login
-            window.location.href = "index.php";
-        } else {
-            alert("Erro ao sair: " + result.mensagem);
+                    // redireciona para a tela de login
+                    window.location.href = "index.php";
+                } else {
+                    alert("Erro ao sair: " + result.mensagem);
+                }
+            } catch (error) {
+                alert("Falha na conexão com o servidor de logout.");
+                console.error(error);
+            }
         }
-    } catch (error) {
-        alert("Falha na conexão com o servidor de logout.");
-        console.error(error);
-    }
-}
 
     </script>
 </body>

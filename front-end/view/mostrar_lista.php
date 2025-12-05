@@ -1,3 +1,26 @@
+<?php
+session_start();
+
+$required_levels = ['administrador', 'gestor', 'colaborador'];
+
+$redirect_page = 'index.php';
+
+if (!isset($_SESSION['user_id']) || !isset($_SESSION['login_token'])) {
+    $_SESSION['auth_error'] = "Você precisa estar logado para acessar esta página.";
+    header("Location: " . $redirect_page);
+    exit();
+}
+
+$user_nivel_sessao = isset($_SESSION['user_nivel']) ? strtolower(trim($_SESSION['user_nivel'])) : null;
+
+if (empty($user_nivel_sessao) || !in_array($user_nivel_sessao, $required_levels)) {
+    $_SESSION['auth_error'] = "Acesso Negado. Seu nível de usuário ('" . strtoupper($user_nivel_sessao) . "') não tem permissão para esta área.";
+
+    header("Location: " . $redirect_page);
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -27,19 +50,19 @@
                     <div class="itensmenu">
                         <div class="cardmenu">
                             <i class="bi bi-house"></i>
-                            <li><a href="home_admin.html">Home</a></li>
+                            <li><a href="home_admin.php">Home</a></li>
                         </div>
                         <div class="cardmenu">
                             <i class="bi bi-person-add"></i>
-                            <li><a href="cadastro.html">Cadastrar Usuário</a></li>
+                            <li><a href="cadastro.php">Cadastrar Usuário</a></li>
                         </div>
                         <div class="cardmenu">
                             <i class="bi bi-house-add"></i>
-                            <li><a href="cadastrar_ambientes.html">Cadastrar Ambientes</a></li>
+                            <li><a href="cadastrar_ambiente.php">Cadastrar Ambientes</a></li>
                         </div>
                         <div class="cardmenu">
                             <i class="bi bi-house-door"></i>
-                            <li><a href="ambientes.html">Ambientes</a></li>
+                            <li><a href="ambientes.php">Ambientes</a></li>
                         </div>
                     </div>
                     <div class="sair" onclick="Sair()">
@@ -67,8 +90,8 @@
         <!-- <input type="text" id="barra" class="form-control mb-3" placeholder="Pesquisar patrimônio..."> -->
 
         <!-- Tabela simulando CSV -->
-         <div class="tabela-card">
-            <table class="table">
+         <div class="tabela">
+            <table class="table table-bordered table-striped tabela-customizada">
             <thead>
                 <tr>
                     <th>Número Patrimônio</th>
@@ -77,6 +100,10 @@
             </thead>
             <tbody id="lista-patrimonios"></tbody>
         </table>
+         </div>
+
+         <div class="buton">
+            <button type="submit" onclick="Scanner()"><i class="bi bi-check-square"></i>  Verificar Patrimônios</button>
          </div>
         
     </main>
@@ -133,6 +160,19 @@
 
         function renderizarPatrimonios(patrimonios) {
             const lista = document.getElementById("lista-patrimonios");
+
+
+    // Adicione esta linha para depuração
+    console.log("Elemento encontrado:", lista); 
+
+    // Se o elemento for null, o erro acontecerá na linha abaixo
+    if (!lista) {
+        console.error("ERRO: O elemento 'lista-patrimonios' não foi encontrado no DOM!");
+        return; // Para a execução para evitar o erro
+    }
+
+
+
             lista.innerHTML = "";
 
             if (patrimonios.length === 0) {
@@ -151,26 +191,23 @@
             });
         }
 
-        // Pesquisa em tempo real
-        // const barra = document.getElementById("barra");
-        // barra.addEventListener("input", function() {
-        //     const termo = this.value.toLowerCase();
-        //     const filtrados = patrimoniosCarregados.filter(p =>
-        //         String(p.num_patrimonio).toLowerCase().includes(termo) ||
-        //         p.denominacao.toLowerCase().includes(termo) ||
-        //         (p.localizacao || "").toLowerCase().includes(termo)
-        //     );
-        //     renderizarPatrimonios(filtrados);
-        // });
 
         function Voltar() {
-            window.location.href = 'ambientes.html';
+            window.location.href = 'ambientes.php';
         }
 
         document.addEventListener("DOMContentLoaded", () => {
             carregarNomeAmbiente();   // Atualiza h1
             carregarPatrimonios();    // Carrega tabela
         });
+
+        function Scanner(){
+            window.location.href = 'scanner.php'
+        }
+
+        function Perfil(){
+            window.location.href = 'perfil_admin.php'
+        }
     </script>
 </body>
 </html>
